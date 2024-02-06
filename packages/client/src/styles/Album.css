@@ -1,0 +1,5 @@
+.album {
+    & img {
+        width: 410px;
+    }
+}
