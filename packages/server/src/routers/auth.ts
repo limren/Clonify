@@ -5,13 +5,14 @@ import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
 import fs from "fs";
 import jsonwebtoken from "jsonwebtoken";
-export const userRouter = router({
+export const authRouter = router({
   register: publicProcedure
     .input(
       z.object({
         username: z.string(),
         email: z.string(),
         password: z.string(),
+        role: z.enum(["USER", "ARTIST", "ADMIN"]).nullable(),
       })
     )
     .query(async (opts) => {
@@ -32,6 +33,7 @@ export const userRouter = router({
           username: opts.input.username,
           email: opts.input.email,
           password: hashedPassword,
+          role: opts.input.role || "USER",
         },
         select: {
           id: true,
@@ -66,6 +68,7 @@ export const userRouter = router({
           username: true,
           email: true,
           password: true,
+          role: true,
         },
       });
       if (!user) {
@@ -89,6 +92,7 @@ export const userRouter = router({
       const payload = {
         id: user.id,
         email: user.email,
+        role: user.role,
       };
       const options = {
         expiresIn: "5h",

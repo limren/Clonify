@@ -16,3 +16,33 @@ export const authorizedProcedure = publicProcedure.use((opts) => {
   }
   return opts.next();
 });
+
+export const userProcedure = publicProcedure.use((opts) => {
+  if (opts.ctx.user?.role != "USER") {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Your role doesn't allow you to perform this action.",
+    });
+  }
+  return opts.next();
+});
+
+export const artistProcedure = publicProcedure.use((opts) => {
+  if (opts.ctx.user?.role != "ARTIST") {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Your role doesn't allow you to perform this action.",
+    });
+  }
+  return opts.next();
+});
+
+export const adminProcedure = publicProcedure.use((opts) => {
+  if (opts.ctx.user?.role != "ADMIN") {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Your role doesn't allow you to perform this action.",
+    });
+  }
+  return opts.next();
+});
