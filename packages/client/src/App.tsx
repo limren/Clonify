@@ -1,11 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
 import { trpc } from "../utils/trpc";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Navbar } from "./components/Navbar";
-import { Album } from "./pages/Album";
 import "./styles/App.css";
-function App() {
+const App = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -27,11 +26,11 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <div className="App">
           <Navbar />
-          <Album />
+          {children}
         </div>
       </QueryClientProvider>
     </trpc.Provider>
   );
-}
+};
 
 export default App;
