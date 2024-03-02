@@ -3,6 +3,7 @@ import { Payload } from "../../../shared/types/token";
 
 export const decodeAndVerifyJwtToken = (token: string): Payload => {
   try {
+    // console.log("token : ", token);
     const decodedToken: Payload = jwtDecode(token);
     if (!decodedToken) {
       console.error("Error: Decoded token is null.");

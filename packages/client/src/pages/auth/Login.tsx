@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import { trpc } from "../../../utils/trpc";
+import { useNavigate } from "react-router-dom";
 
 const inputs = z.object({
   email: z
@@ -21,7 +23,21 @@ export const Login = () => {
   } = useForm<Inputs>({
     resolver: zodResolver(inputs),
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const navigate = useNavigate();
+  const loginMutation = trpc.auth.login.useMutation();
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log(data);
+    const response = await loginMutation.mutateAsync(data);
+    const token = response?.token;
+    if (!token) {
+      localStorage.removeItem("token");
+    } else {
+      localStorage.setItem("token", token);
+      navigate("/");
+    }
+    console.log("response : ", response);
+    console.log("token : ", token);
+  };
   return (
     <section>
       <main>

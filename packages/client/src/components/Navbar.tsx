@@ -1,7 +1,9 @@
 import React from "react";
 import "../styles/Navbar.css";
-import { Link } from "react-router-dom";
+import { LoggedIn } from "./Navbar/LoggedIn";
+import { LoggedOut } from "./Navbar/LoggedOut";
 export const Navbar = () => {
+  const token = localStorage.getItem("token");
   return (
     <header className="navbar">
       <nav>
@@ -19,14 +21,7 @@ export const Navbar = () => {
           <li>--</li>
           <li>2018</li>
         </ul>
-        <ul>
-          <li>
-            <Link to="/login">Connexion</Link>
-          </li>
-          <li>
-            <Link to="/register">S'enregistrer</Link>
-          </li>
-        </ul>
+        {token != "" && token ? <LoggedIn /> : <LoggedOut />}
       </nav>
     </header>
   );

@@ -1,7 +1,9 @@
-import { initTRPC } from "@trpc/server";
-import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { decodeAndVerifyJwtToken } from "./utils/auth";
-export async function createContext({ req, res }) {
+import * as trpcExpress from "@trpc/server/adapters/express";
+export async function createContext({
+  req,
+  res,
+}: trpcExpress.CreateExpressContextOptions) {
   async function getUserFromHeader() {
     if (req.headers.authorization) {
       const user = await decodeAndVerifyJwtToken(

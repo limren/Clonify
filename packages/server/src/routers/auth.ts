@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../trpc";
+import { authorizedProcedure, publicProcedure, router } from "../trpc";
 import { prisma } from "../app";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
@@ -15,18 +15,18 @@ export const authRouter = router({
         role: z.enum(["USER", "ARTIST", "ADMIN"]).nullable(),
       })
     )
-    .query(async (opts) => {
-      const userAlreadyExists = await prisma.user.findUnique({
-        where: {
-          email: opts.input.email,
-        },
-      });
-      if (userAlreadyExists) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Email already exists.",
-        });
-      }
+    .mutation(async (opts) => {
+      // const userAlreadyExists = await prisma.user.findUnique({
+      //   where: {
+      //     email: opts.input.email,
+      //   },
+      // });
+      // if (userAlreadyExists) {
+      //   throw new TRPCError({
+      //     code: "BAD_REQUEST",
+      //     message: "Email already exists.",
+      //   });
+      // }
       const hashedPassword = await bcrypt.hash(opts.input.password, 10);
       const newUser = await prisma.user.create({
         data: {
@@ -58,7 +58,7 @@ export const authRouter = router({
         password: z.string(),
       })
     )
-    .query(async (opts) => {
+    .mutation(async (opts) => {
       const user = await prisma.user.findUnique({
         where: {
           email: opts.input.email,
@@ -88,19 +88,42 @@ export const authRouter = router({
         });
       }
       // Creation of JWT token
-      const secretKey = fs.readFileSync("../keys/private.key", "utf8");
+      const secretKey = fs.readFileSync("./src/keys/private.key", "utf8");
       const payload = {
         id: user.id,
         email: user.email,
         role: user.role,
       };
-      const options = {
+      const token = jsonwebtoken.sign(payload, secretKey, {
+        algorithm: "RS512",
         expiresIn: "5h",
-      };
-      const token = jsonwebtoken.sign(payload, secretKey, options);
+      });
       return {
         user: user,
         token: token,
       };
     }),
+  getUser: authorizedProcedure.query(async (opts) => {
+    const idPayload = opts.ctx.user?.id;
+    if (!idPayload) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "User is not authorized.",
+      });
+    }
+    console.log("working until now, id payload: ", idPayload);
+    const user = await prisma.user.findUnique({
+      where: {
+        id: idPayload,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
+        profilePath: true,
+      },
+    });
+    return user;
+  }),
 });

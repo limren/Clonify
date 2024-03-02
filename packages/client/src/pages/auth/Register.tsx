@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import { trpc } from "../../../utils/trpc";
 
 const inputs = z
   .object({
@@ -19,6 +20,7 @@ const inputs = z
       .string()
       .min(6, { message: "Le mot de passe doit faire au moins 6 caractères" })
       .max(20, { message: "Le mot de passe est trop long" }),
+    role: z.enum(["USER", "ARTIST", "ADMIN"]).nullable(),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {
@@ -40,7 +42,14 @@ export const Register = () => {
   } = useForm<Inputs>({
     resolver: zodResolver(inputs),
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
+  const registerMutation = trpc.auth.register.useMutation();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log(data);
+    const response = await registerMutation.mutateAsync(data);
+    console.log("response : ", response);
+  };
   return (
     <section>
       <main>
@@ -81,10 +90,9 @@ export const Register = () => {
             {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
           </section>
           <section>
-            <select>
+            <select {...register("role")}>
               <option value="USER">Utilisateur</option>
               <option value="ARTIST">Artiste</option>
-              <option value="ADMIN">Administrateur</option>
             </select>
           </section>
           <button type="submit">Connexion</button>
