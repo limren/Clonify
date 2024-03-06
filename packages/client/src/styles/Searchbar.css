@@ -1,0 +1,13 @@
+.searchbar {
+    position: relative;
+
+    & input {
+        padding: 8px 13px;
+        border-radius: 8px;
+        font-size: 13px;
+        width: 400px;
+        color: white;
+        background-color: #1E1E1E;
+        border: none;
+    }
+}

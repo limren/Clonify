@@ -47,7 +47,8 @@ model Track {
   title         String
   albumId       Int?
   Album         Album?     @relation(fields: [albumId], references: [id])
-  duration      Int
+  minutes       Int
+  seconds       Int
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   User          User?      @relation(fields: [artistId], references: [id])
@@ -55,6 +56,7 @@ model Track {
   Playlist      Playlist[]
   year          Int
   thumbnailPath String?
+  trackPath     String?
 }
 
 model Playlist {

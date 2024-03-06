@@ -9,6 +9,7 @@ export const LoggedIn = () => {
   return (
     <ul>
       <li>
+        <img src="./Avatar.png" />
         <Link to="/dashboard">{user?.username}</Link>
       </li>
     </ul>

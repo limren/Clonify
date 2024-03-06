@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Album } from "./pages/Album.tsx";
 import { Login } from "./pages/auth/Login.tsx";
 import { Register } from "./pages/auth/Register.tsx";
+import { CreateTrack } from "./pages/artist/create/CreateTrack.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <App children={<Register />} />,
+  },
+  {
+    path: "/artist/createTrack",
+    element: <App children={<CreateTrack />} />,
   },
 ]);
 

@@ -251,4 +251,24 @@ export const playlistRouter = router({
       });
       return playlist;
     }),
+  getRandomPlaylist: authorizedProcedure.query(async (opts) => {
+    const { user } = opts.ctx;
+    if (!user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "You must be logged in to view your playlist of the day.",
+      });
+    }
+    const playlists = await prisma.user.findMany({
+      where: {
+        id: user.id,
+      },
+    });
+    if (playlists.length === 0) {
+      return {};
+    }
+    // Getting a random playlist from the user's playlists
+    const randomNb = Math.floor(Math.random() * playlists.length);
+    return playlists[randomNb];
+  }),
 });

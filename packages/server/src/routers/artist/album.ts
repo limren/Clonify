@@ -3,8 +3,42 @@ import { artistProcedure, router } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "../../app";
 
-export const albumArtistRouter = router({
-  create: artistProcedure
+export const albumRouter = router({
+  getMyAlbums: artistProcedure.query(async (opts) => {
+    const { user } = opts.ctx;
+    if (!user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "You must be logged in as an artist to view your albums.",
+      });
+    }
+    const albums = await prisma.album.findMany({
+      where: {
+        artistId: user.id,
+      },
+      select: {
+        id: true,
+        title: true,
+        year: true,
+        thumbnailPath: true,
+        Track: {
+          select: {
+            id: true,
+            title: true,
+            thumbnailPath: true,
+            User: {
+              select: {
+                id: true,
+                username: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return albums;
+  }),
+  createAlbum: artistProcedure
     .input(
       z.object({
         title: z.string(),
@@ -131,7 +165,7 @@ export const albumArtistRouter = router({
       });
       return album;
     }),
-  delete: artistProcedure
+  deleteAlbum: artistProcedure
     .input(
       z.object({
         albumId: z.number(),

@@ -1,0 +1,49 @@
+.sidebar {
+    width: 240px;
+    height: 100%;
+    color: white;
+    padding: 18px 0;
+    padding-left: 30px;
+
+    & nav {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+
+        & main {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+
+            & section {
+                & h3 {
+                    font-size: 11px;
+                    color: #454545;
+                }
+
+                & ul {
+                    padding-top: 0.5rem;
+                    list-style: none;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.8rem;
+
+                    & li {
+                        cursor: pointer;
+
+                        & a {
+                            font-size: 14px;
+                            text-decoration: none;
+                            color: white;
+                        }
+
+                        & a:hover {
+                            color: #C84F2D;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+}
