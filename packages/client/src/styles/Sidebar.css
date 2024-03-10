@@ -18,7 +18,7 @@
             & section {
                 & h3 {
                     font-size: 11px;
-                    color: #454545;
+                    color: #5c5959;
                 }
 
                 & ul {
@@ -42,6 +42,28 @@
                         }
 
                     }
+                }
+            }
+
+            & button {
+                border: none;
+                color: #C84F2D;
+                background-color: transparent;
+                font-size: 13px;
+            }
+
+
+
+            & .create-popup {
+                cursor: pointer;
+                display: flex;
+                margin-top: 13px;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5rem;
+
+                & img {
+                    width: 25px;
                 }
             }
         }

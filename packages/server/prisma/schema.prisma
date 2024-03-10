@@ -62,6 +62,7 @@ model Track {
 model Playlist {
   id            Int      @id @default(autoincrement())
   title         String
+  description   String?
   thumbnailPath String?
   userId        Int
   User          User     @relation(fields: [userId], references: [id])

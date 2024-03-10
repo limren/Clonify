@@ -7,12 +7,12 @@ import { getAuthToken } from "../utils/token";
 import "./styles/App.css";
 import { MusicPlayer } from "./components/MusicPlayer";
 import { Navbar } from "./components/Navbar";
+import { PopUpPlaylist } from "./components/PopUpPlaylist";
 const App = ({ children }: { children: React.ReactNode }) => {
-  // const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [popUpOpen, setPopUpOpen] = React.useState(false);
   const [queryClient] = useState(
     () =>
       new QueryClient({
-        // Settings for all queries, this config might be modified in others pages
         defaultOptions: {
           queries: {
             refetchOnWindowFocus: false,
@@ -39,8 +39,9 @@ const App = ({ children }: { children: React.ReactNode }) => {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <section className="App">
+          {popUpOpen && <PopUpPlaylist setPopUpOpen={setPopUpOpen} />}
           <main>
-            <Sidebar />
+            <Sidebar setPopUpOpen={setPopUpOpen} />
             <section>
               <Navbar />
               {children}

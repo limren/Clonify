@@ -1,0 +1,14 @@
+.newReleases {
+    color: white;
+
+    & h2 {
+        font-size: 0.7rem;
+        color: #5c5959;
+    }
+
+    &>section {
+        padding: 10px 0;
+        display: flex;
+        gap: 10px;
+    }
+}

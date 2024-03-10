@@ -4,7 +4,11 @@ import "../styles/Sidebar.css";
 // import { LoggedOut } from "./Sidebar/LoggedOut";
 import { Link } from "react-router-dom";
 import { trpc } from "../../utils/trpc";
-export const Sidebar = () => {
+export const Sidebar = ({
+  setPopUpOpen,
+}: {
+  setPopUpOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   // const token = localStorage.getItem("token");
   const userFetch = trpc.auth.getUser.useQuery();
   const userData = userFetch?.data;
@@ -20,7 +24,7 @@ export const Sidebar = () => {
               <li>
                 <div>
                   <img></img>
-                  <Link to="/">Feed</Link>
+                  <Link to="/feed">Feed</Link>
                 </div>
               </li>
               <li>
@@ -94,6 +98,13 @@ export const Sidebar = () => {
                 </div>
               </li>
             </ul>
+            <section
+              className="create-popup"
+              onClick={() => setPopUpOpen(true)}
+            >
+              <button>Create new playlist</button>
+              <img src="./AddIcon.svg" />
+            </section>
           </section>
           {userData?.role === "ARTIST" && (
             <section>

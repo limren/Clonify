@@ -74,10 +74,11 @@ export const playlistRouter = router({
     });
     return playlists;
   }),
-  create: authorizedProcedure
+  createPlaylist: authorizedProcedure
     .input(
       z.object({
         title: z.string(),
+        description: z.string(),
       })
     )
     .query(async (opts) => {
@@ -126,7 +127,7 @@ export const playlistRouter = router({
         });
       }
     }),
-  delete: authorizedProcedure
+  deletePlaylist: authorizedProcedure
     .input(
       z.object({
         playlistId: z.number(),
@@ -148,7 +149,7 @@ export const playlistRouter = router({
       });
       return playlist;
     }),
-  addTrack: authorizedProcedure
+  addTrackPlaylist: authorizedProcedure
     .input(
       z.object({
         trackId: z.number(),
@@ -178,7 +179,7 @@ export const playlistRouter = router({
       });
       return playlist;
     }),
-  deleteTrack: authorizedProcedure
+  deleteTrackPlaylist: authorizedProcedure
     .input(
       z.object({
         playlistId: z.number(),
@@ -208,11 +209,12 @@ export const playlistRouter = router({
       });
       return playlist;
     }),
-  updateTitle: authorizedProcedure
+  updatePlaylist: authorizedProcedure
     .input(
       z.object({
         playlistId: z.number(),
-        newTitle: z.string(),
+        newTitle: z.string().optional(),
+        newDescription: z.string().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -223,14 +225,22 @@ export const playlistRouter = router({
           message: "You must be logged in to update a playlist.",
         });
       }
+      const { newTitle, newDescription } = opts.input;
+
+      const objInputs = {};
+      if (newTitle) {
+        objInputs["title"] = newTitle;
+      }
+      if (newDescription) {
+        objInputs["description"] = newDescription;
+      }
+
       const playlist = await prisma.playlist.update({
         where: {
           id: opts.input.playlistId,
           userId: user.id,
         },
-        data: {
-          title: opts.input.newTitle,
-        },
+        data: objInputs,
         select: {
           id: true,
           title: true,

@@ -7,6 +7,7 @@ import { Album } from "./pages/Album.tsx";
 import { Login } from "./pages/auth/Login.tsx";
 import { Register } from "./pages/auth/Register.tsx";
 import { CreateTrack } from "./pages/artist/create/CreateTrack.tsx";
+import { Feed } from "./pages/Feed.tsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,14 @@ const router = createBrowserRouter([
   {
     path: "/artist/createTrack",
     element: <App children={<CreateTrack />} />,
+  },
+  // {
+  //   path: "/artist/createAlbum",
+  //   element: <App children={<CreateAlbum />} />,
+  // },
+  {
+    path: "/feed",
+    element: <App children={<Feed />} />,
   },
 ]);
 

@@ -33,6 +33,9 @@ export const CreateTrack = () => {
   console.log("albums : ", albums);
   const mutateData = trpc.artist.createTrack.useMutation();
   const onSubmit = async (data: Inputs) => {
+    if (data.albumId === 0) {
+      data.albumId = null;
+    }
     console.log("data : ", data);
     const response = await mutateData.mutateAsync(data);
     console.log("response : ", response);
@@ -86,7 +89,7 @@ export const CreateTrack = () => {
               id="albumId"
               {...register("albumId", { valueAsNumber: true })}
             >
-              <option value={undefined}>Appartient à aucun album</option>
+              <option value={0}>Appartient à aucun album</option>
               {albums?.map((album) => (
                 <option key={album.id} value={album.id}>
                   {album.title}
