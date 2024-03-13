@@ -17,29 +17,34 @@ enum Role {
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
-  username    String     @unique
-  email       String     @unique
-  password    String
-  profilePath String?
-  role        Role       @default(USER)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  Playlist    Playlist[]
-  Album       Album[]
-  Track       Track[]
+  id               Int        @id @default(autoincrement())
+  username         String     @unique
+  email            String     @unique
+  password         String
+  profilePath      String?
+  role             Role       @default(USER)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  Playlist         Playlist[]
+  Album            Album[]
+  Track            Track[]
+  likedTracks      Track[]    @relation("UserLikes")
+  likedAlbums      Album[]    @relation("UserAlbumLikes")
+  likedArtists     User[]     @relation("UserArtistsLikes")
+  UserArtistsLikes User[]     @relation("UserArtistsLikes")
 }
 
 model Album {
-  id            Int      @id @default(autoincrement())
-  title         String
-  artistId      Int
-  User          User     @relation(fields: [artistId], references: [id])
-  year          Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  thumbnailPath String?
-  Track         Track[]
+  id             Int      @id @default(autoincrement())
+  title          String
+  artistId       Int
+  User           User     @relation(fields: [artistId], references: [id])
+  year           Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  thumbnailPath  String?
+  Track          Track[]
+  UserAlbumLikes User[]   @relation("UserAlbumLikes")
 }
 
 model Track {
@@ -57,6 +62,7 @@ model Track {
   year          Int
   thumbnailPath String?
   trackPath     String?
+  UserLikes     User[]     @relation("UserLikes")
 }
 
 model Playlist {

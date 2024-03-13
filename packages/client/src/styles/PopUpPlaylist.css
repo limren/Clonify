@@ -10,7 +10,7 @@
     justify-content: center;
 
 
-    & main {
+    & .popUpPlaylistContent {
         color: white;
         width: 900px;
         height: 400px;

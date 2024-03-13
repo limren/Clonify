@@ -4,12 +4,12 @@ import "../styles/Sidebar.css";
 // import { LoggedOut } from "./Sidebar/LoggedOut";
 import { Link } from "react-router-dom";
 import { trpc } from "../../utils/trpc";
+import { Playlists } from "./Sidebar/Playlists";
 export const Sidebar = ({
   setPopUpOpen,
 }: {
   setPopUpOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  // const token = localStorage.getItem("token");
   const userFetch = trpc.auth.getUser.useQuery();
   const userData = userFetch?.data;
   return (
@@ -72,32 +72,7 @@ export const Sidebar = ({
           </section>
           <section>
             <h3>YOUR PLAYLISTS</h3>
-            <ul>
-              <li>
-                <div>
-                  <img></img>
-                  <Link to="/">Metalcore</Link>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <img></img>
-                  <Link to="/">Electro</Link>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <img></img>
-                  <Link to="/">Funk</Link>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <img></img>
-                  <Link to="/">Disco</Link>
-                </div>
-              </li>
-            </ul>
+            <Playlists />
             <section
               className="create-popup"
               onClick={() => setPopUpOpen(true)}

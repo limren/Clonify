@@ -2,10 +2,11 @@ import { z } from "zod";
 import "../styles/PopUpPlaylist.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { trpc } from "../../utils/trpc";
 
 const input = z.object({
-  title: z.string(),
-  description: z.string(),
+  title: z.string().min(2, { message: "You must enter a title" }),
+  description: z.string().optional(),
 });
 
 type Input = z.infer<typeof input>;
@@ -22,12 +23,20 @@ export const PopUpPlaylist = ({
   } = useForm<Input>({
     resolver: zodResolver(input),
   });
-  const onSubmit = (data: Input) => {
-    console.log("data: ", data);
+  const utils = trpc.useUtils();
+  const mutation = trpc.user.createPlaylist.useMutation({
+    onSuccess: (data) => {
+      console.log("data : ", data);
+      utils.user.getPlaylists.refetch();
+      setPopUpOpen(false);
+    },
+  });
+  const onSubmit = async (data: Input) => {
+    await mutation.mutateAsync(data);
   };
   return (
     <section className="popUpPlaylist">
-      <main>
+      <main className="popUpPlaylistContent">
         <header>
           <h2>Your new playlist</h2>
           <button onClick={() => setPopUpOpen(false)}>X</button>

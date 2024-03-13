@@ -78,10 +78,10 @@ export const playlistRouter = router({
     .input(
       z.object({
         title: z.string(),
-        description: z.string(),
+        description: z.string().optional(),
       })
     )
-    .query(async (opts) => {
+    .mutation(async (opts) => {
       try {
         const { user } = opts.ctx;
         if (!user) {
@@ -93,6 +93,7 @@ export const playlistRouter = router({
         const playlist = await prisma.playlist.create({
           data: {
             title: opts.input.title,
+            description: opts.input.description,
             User: {
               connect: {
                 id: user.id,
@@ -102,6 +103,7 @@ export const playlistRouter = router({
           select: {
             id: true,
             title: true,
+            description: true,
             Track: {
               select: {
                 id: true,
@@ -209,58 +211,58 @@ export const playlistRouter = router({
       });
       return playlist;
     }),
-  updatePlaylist: authorizedProcedure
-    .input(
-      z.object({
-        playlistId: z.number(),
-        newTitle: z.string().optional(),
-        newDescription: z.string().optional(),
-      })
-    )
-    .mutation(async (opts) => {
-      const { user } = opts.ctx;
-      if (!user) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "You must be logged in to update a playlist.",
-        });
-      }
-      const { newTitle, newDescription } = opts.input;
+  // updatePlaylist: authorizedProcedure
+  //   .input(
+  //     z.object({
+  //       playlistId: z.number(),
+  //       newTitle: z.string().optional(),
+  //       newDescription: z.string().optional(),
+  //     })
+  //   )
+  //   .mutation(async (opts) => {
+  //     const { user } = opts.ctx;
+  //     if (!user) {
+  //       throw new TRPCError({
+  //         code: "UNAUTHORIZED",
+  //         message: "You must be logged in to update a playlist.",
+  //       });
+  //     }
+  //     const { newTitle, newDescription } = opts.input;
 
-      const objInputs = {};
-      if (newTitle) {
-        objInputs["title"] = newTitle;
-      }
-      if (newDescription) {
-        objInputs["description"] = newDescription;
-      }
+  //     const objInputs = {};
+  //     if (newTitle) {
+  //       objInputs["title"] = newTitle;
+  //     }
+  //     if (newDescription) {
+  //       objInputs["description"] = newDescription;
+  //     }
 
-      const playlist = await prisma.playlist.update({
-        where: {
-          id: opts.input.playlistId,
-          userId: user.id,
-        },
-        data: objInputs,
-        select: {
-          id: true,
-          title: true,
-          Track: {
-            select: {
-              id: true,
-              title: true,
-              User: {
-                select: {
-                  id: true,
-                  username: true,
-                },
-              },
-              thumbnailPath: true,
-            },
-          },
-        },
-      });
-      return playlist;
-    }),
+  //     const playlist = await prisma.playlist.update({
+  //       where: {
+  //         id: opts.input.playlistId,
+  //         userId: user.id,
+  //       },
+  //       data: objInputs,
+  //       select: {
+  //         id: true,
+  //         title: true,
+  //         Track: {
+  //           select: {
+  //             id: true,
+  //             title: true,
+  //             User: {
+  //               select: {
+  //                 id: true,
+  //                 username: true,
+  //               },
+  //             },
+  //             thumbnailPath: true,
+  //           },
+  //         },
+  //       },
+  //     });
+  //     return playlist;
+  //   }),
   getRandomPlaylist: authorizedProcedure.query(async (opts) => {
     const { user } = opts.ctx;
     if (!user) {
