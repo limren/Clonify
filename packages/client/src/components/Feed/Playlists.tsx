@@ -1,5 +1,5 @@
-import React from "react";
 import { trpc } from "../../../utils/trpc";
+import "../../styles/Feed/Playlists.css";
 
 export const Playlists = () => {
   const playlistsFetch = trpc.user.getPlaylists.useQuery();
@@ -8,5 +8,27 @@ export const Playlists = () => {
   if (!playlists) {
     return <p>No playlist found !</p>;
   }
-  return <div>Playlists</div>;
+  const dataTracks = {
+    nbTracks: 0,
+    nbHours: 0,
+    nbMinutes: 0,
+  };
+  return (
+    <ul className="playlistsFeed">
+      {playlists.map((playlist) => (
+        <li key={playlist.id}>
+          <section>
+            <img src="./Thumbnail.png" />
+            <p>{playlist.title}</p>
+          </section>
+          <section>
+            {dataTracks.nbTracks} tracks - {dataTracks.nbHours}h{" "}
+            {dataTracks.nbMinutes}m
+          </section>
+          <section>{}</section>
+          <section></section>
+        </li>
+      ))}
+    </ul>
+  );
 };

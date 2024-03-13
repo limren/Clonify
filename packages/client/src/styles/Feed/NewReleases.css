@@ -1,14 +1,47 @@
 .newReleases {
     color: white;
+    width: 240px;
+    overflow: hidden;
 
     & h2 {
         font-size: 0.7rem;
         color: #5c5959;
     }
 
-    &>section {
+    &>a {
+        text-decoration: none;
+        color: white;
         padding: 10px 0;
         display: flex;
         gap: 10px;
+
+
+        & img {
+            width: 45px;
+            border-radius: 0.5rem;
+        }
+
+        & main {
+            width: 100%;
+
+            & h3 {
+                font-size: 1rem;
+                font-weight: 500;
+            }
+
+            & ul {
+                list-style: none;
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                flex-wrap: wrap;
+
+                & li {
+                    font-size: 0.8rem;
+                    padding-right: 5px;
+                    color: #878181;
+                }
+            }
+        }
     }
 }

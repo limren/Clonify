@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { trpc } from "../../../utils/trpc";
 import "../../styles/Feed/NewReleases.css";
 
@@ -11,19 +12,20 @@ export const NewReleases = () => {
       {newReleases ? (
         newReleases?.map((newReleases) => {
           return (
-            <section key={newReleases.id}>
+            <Link to="/" key={newReleases.id}>
               <img src={"./Thumbnail.png"} alt={newReleases.title} />
               <main>
                 <h3>{newReleases.title}</h3>
-                <section>
-                  <p>Track</p>
-                  <p>{newReleases.User?.username}</p>
-                  <p>
-                    {newReleases.Album ? newReleases.Album.title : "Single"}
-                  </p>
-                </section>
+                <ul>
+                  <li>Track</li>
+                  <li>∙ {newReleases.User?.username}</li>
+                  <li>
+                    ∙ {newReleases.Album ? newReleases.Album.title : "Single"}
+                  </li>
+                  <li>∙ {newReleases.year}</li>
+                </ul>
               </main>
-            </section>
+            </Link>
           );
         })
       ) : (

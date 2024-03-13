@@ -1,0 +1,43 @@
+.playlistOfTheDay {
+    width: 230px;
+    height: 230px;
+
+    &>main {
+        width: 100%;
+        height: 100%;
+
+        &>header {
+            width: 100%;
+            height: 100%;
+            position: relative;
+
+            & img {
+                border-radius: 10px;
+                width: 100%;
+                height: 100%;
+            }
+
+            & section {
+                position: absolute;
+                width: 100%;
+                top: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 5px;
+
+                & header {
+                    display: flex;
+
+                    & p {
+                        font-size: 10px;
+                        color: #878181;
+
+                    }
+                }
+
+            }
+        }
+    }
+
+}
