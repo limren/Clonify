@@ -8,6 +8,7 @@ import { Login } from "./pages/auth/Login.tsx";
 import { Register } from "./pages/auth/Register.tsx";
 import { CreateTrack } from "./pages/artist/create/CreateTrack.tsx";
 import { Feed } from "./pages/Feed.tsx";
+import { Playlists } from "./components/Feed/Nav/Playlists.tsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,22 @@ const router = createBrowserRouter([
   // },
   {
     path: "/feed",
+    element: <App children={<Feed />} />,
+  },
+  {
+    path: "/feed/playlists",
+    element: <App children={<Feed children={<Playlists />} />} />,
+  },
+  {
+    path: "/feed/albums",
+    element: <App children={<Feed />} />,
+  },
+  {
+    path: "/feed/artists",
+    element: <App children={<Feed />} />,
+  },
+  {
+    path: "/feed/streams",
     element: <App children={<Feed />} />,
   },
 ]);

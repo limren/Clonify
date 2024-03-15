@@ -3,14 +3,26 @@
         display: flex;
         gap: 35px;
         list-style: none;
+        border-top: 1px solid #343131;
 
         & li {
-            padding-top: 15px;
+            padding-top: 14px;
+            border-top: 3px solid transparent;
 
             & a {
                 text-decoration: none;
                 color: white;
-                font-size: 15px;
+                font-size: 14px;
+            }
+        }
+
+        & li:hover,
+        .active {
+            border-top: 3px solid #C84F2D;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(200, 79, 45, 0.3757878151260504) 98%);
+
+            & a {
+                color: #C84F2D;
             }
         }
     }

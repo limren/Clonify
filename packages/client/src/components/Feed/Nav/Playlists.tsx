@@ -1,9 +1,12 @@
-import { trpc } from "../../../utils/trpc";
-import "../../styles/Feed/Playlists.css";
+import { trpc } from "../../../../utils/trpc";
+import "../../../styles/Feed/Playlists.css";
 
 export const Playlists = () => {
   const playlistsFetch = trpc.user.getPlaylists.useQuery();
-  const playlists = playlistsFetch.data;
+  const playlists =
+    playlistsFetch.data && playlistsFetch.data.length > 5
+      ? playlistsFetch.data?.slice(0, 5)
+      : playlistsFetch.data;
 
   if (!playlists) {
     return <p>No playlist found !</p>;
