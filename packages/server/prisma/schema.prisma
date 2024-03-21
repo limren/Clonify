@@ -28,10 +28,10 @@ model User {
   Playlist         Playlist[]
   Album            Album[]
   Track            Track[]
-  likedTracks      Track[]    @relation("UserLikes")
+  likedTracks      Track[]    @relation("UserTrackLikes")
   likedAlbums      Album[]    @relation("UserAlbumLikes")
-  likedArtists     User[]     @relation("UserArtistsLikes")
-  UserArtistsLikes User[]     @relation("UserArtistsLikes")
+  likedArtists     User[]     @relation("UserArtistLikes")
+  UserArtistsLikes User[]     @relation("UserArtistLikes")
 }
 
 model Album {
@@ -62,7 +62,7 @@ model Track {
   year          Int
   thumbnailPath String?
   trackPath     String?
-  UserLikes     User[]     @relation("UserLikes")
+  UserLikes     User[]     @relation("UserTrackLikes")
 }
 
 model Playlist {

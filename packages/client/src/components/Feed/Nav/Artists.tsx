@@ -20,7 +20,7 @@ export const Artists = () => {
         <li key={artist.id}>
           <section>
             <img src="./Thumbnail.png" />
-            <p>{artist.title}</p>
+            <p>{artist.username}</p>
           </section>
           <section>
             {dataTracks.nbTracks} tracks - {dataTracks.nbListeners} Listeners{" "}

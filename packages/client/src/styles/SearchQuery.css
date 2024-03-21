@@ -1,0 +1,15 @@
+.searchQuery {
+    color: white;
+
+    & main {
+        padding-top: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        &>p {
+            text-align: center;
+        }
+    }
+
+}

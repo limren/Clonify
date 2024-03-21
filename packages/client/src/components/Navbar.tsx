@@ -1,4 +1,3 @@
-import React from "react";
 import "../styles/Navbar.css";
 import { Searchbar } from "./Searchbar";
 import { Logged } from "./Navbar/Logged";

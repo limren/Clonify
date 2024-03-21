@@ -9,6 +9,7 @@ import { Register } from "./pages/auth/Register.tsx";
 import { CreateTrack } from "./pages/artist/create/CreateTrack.tsx";
 import { Feed } from "./pages/Feed.tsx";
 import { Playlists } from "./components/Feed/Nav/Playlists.tsx";
+import { SearchQuery } from "./pages/SearchQuery.tsx";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: "/feed/streams",
     element: <App children={<Feed />} />,
+  },
+  {
+    path: "/feed/searchQuery",
+    element: <App children={<SearchQuery />} />,
   },
 ]);
 
