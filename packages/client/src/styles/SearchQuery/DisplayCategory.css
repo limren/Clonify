@@ -1,8 +1,27 @@
 .displayCategories {
     color: white;
+    margin: 0 10px;
 
     &>header {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
+    }
+
+    &>main {
+        &>section {
+            cursor: pointer;
+            padding: 10px 0;
+            border-radius: 10px;
+
+            &>header {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        &>section:hover {
+            background-color: #141414;
+        }
     }
 }

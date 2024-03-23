@@ -13,14 +13,17 @@ export const SearchQuery = () => {
     {
       title: "Playlists",
       array: searchByMutation.data?.playlists,
+      type: "Playlist",
     },
     {
       title: "Artists",
       array: searchByMutation.data?.artists,
+      type: "Artist",
     },
     {
       title: "Albums",
       array: searchByMutation.data?.albums,
+      type: "Album",
     },
   ];
 
@@ -32,7 +35,7 @@ export const SearchQuery = () => {
       </header>
       <main>
         {categories.map((category) => (
-          <DisplayCategory category={category} />
+          <DisplayCategory category={category} query={query} />
         ))}
       </main>
     </section>
