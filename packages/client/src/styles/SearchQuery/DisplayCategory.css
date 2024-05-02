@@ -8,19 +8,30 @@
     }
 
     &>main {
-        &>section {
+        &>a {
             cursor: pointer;
-            padding: 10px 0;
+            padding: 10px 30px;
             border-radius: 10px;
+            margin: 20px 40px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            color: white;
+            text-decoration: none;
 
             &>header {
                 display: flex;
-                flex-direction: column;
                 gap: 10px;
+                align-items: center;
+
+                & img {
+                    width: 30px;
+                    height: 30px;
+                }
             }
         }
 
-        &>section:hover {
+        &>a:hover {
             background-color: #141414;
         }
     }

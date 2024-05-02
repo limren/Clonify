@@ -22,14 +22,17 @@ export const DisplayCategory = ({
       <main>
         {category.array && category.array.length > 0 ? (
           category.array.map((item: any) => (
-            <section>
+            <Link key={item.id} to="#">
               <header>
-                <img src="./Thumbnail.png" />
+                <img src="../Thumbnail.png" />
                 {item.title && <p>{item.title}</p>}
                 {item.username && <p>{item.username}</p>}
-                <p>{category.type}</p>
               </header>
-            </section>
+              <footer>
+                <img src="../HeartFull.svg"></img>
+                <img src="../HeartEmpty.svg"></img>
+              </footer>
+            </Link>
           ))
         ) : (
           <p>No result found</p>

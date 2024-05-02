@@ -12,7 +12,7 @@ export const Playlists = () => {
       {playlists?.map((playlist) => (
         <li key={playlist.id}>
           {/* <img src={"./Thumbnail.png"} alt={playlist.title} /> */}
-          <Link to="/">{playlist.title}</Link>
+          <Link to={`/playlist/${playlist.id}`}>{playlist.title}</Link>
         </li>
       ))}
     </ul>

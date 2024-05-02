@@ -3,6 +3,9 @@ import "../styles/PopUpPlaylist.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { trpc } from "../../utils/trpc";
+import { useState } from "react";
+import axios from "axios";
+import { getAuthToken } from "../../utils/token";
 
 const input = z.object({
   title: z.string().min(2, { message: "You must enter a title" }),
@@ -16,6 +19,8 @@ export const PopUpPlaylist = ({
 }: {
   setPopUpOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  //
+  const [file, setFile] = useState<File | null>(null);
   const {
     register,
     handleSubmit,
@@ -24,15 +29,41 @@ export const PopUpPlaylist = ({
     resolver: zodResolver(input),
   });
   const utils = trpc.useUtils();
-  const mutation = trpc.user.createPlaylist.useMutation({
-    onSuccess: (data) => {
-      console.log("data : ", data);
-      utils.user.getPlaylists.refetch();
-      setPopUpOpen(false);
-    },
-  });
+  // const mutation = trpc.user.createPlaylist.useMutation({
+  //   onSuccess: (data) => {
+  //     console.log("data : ", data);
+  //     utils.user.getPlaylists.refetch();
+  //     setPopUpOpen(false);
+  //   },
+  // });
   const onSubmit = async (data: Input) => {
-    await mutation.mutateAsync(data);
+    const formData = new FormData();
+    if (!file) {
+      console.log("error");
+      return;
+    }
+    formData.append("playlistImg", file);
+    formData.append("title", data.title);
+    formData.append("description", data.description || "");
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    console.log("sending");
+    const res = await axios.post(
+      "http://localhost:8000/api/playlist",
+      formData,
+      config
+    );
+    if (res.status === 200) {
+      utils.user.getPlaylists.refetch();
+    }
+  };
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFile(e.target?.files ? e.target.files[0] : null);
   };
   return (
     <section className="popUpPlaylist">
@@ -42,6 +73,7 @@ export const PopUpPlaylist = ({
           <button onClick={() => setPopUpOpen(false)}>X</button>
         </header>
         <main>
+          <input type="file" onChange={handleFile} />
           <form onSubmit={handleSubmit(onSubmit)}>
             <section>
               <label htmlFor="title">Title</label>

@@ -59,49 +59,54 @@ export const authRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const user = await prisma.user.findUnique({
-        where: {
-          email: opts.input.email,
-        },
-        select: {
-          id: true,
-          username: true,
-          email: true,
-          password: true,
-          role: true,
-        },
-      });
-      if (!user) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Invalid email or password.",
+      try {
+        const user = await prisma.user.findUnique({
+          where: {
+            email: opts.input.email,
+          },
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            password: true,
+            role: true,
+          },
         });
-      }
-      const passwordMatch = await bcrypt.compare(
-        opts.input.password,
-        user.password
-      );
-      if (!passwordMatch) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Invalid email or password.",
+        if (!user) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid email or password.",
+          });
+        }
+        const passwordMatch = await bcrypt.compare(
+          opts.input.password,
+          user.password
+        );
+        if (!passwordMatch) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid email or password.",
+          });
+        }
+        // Creation of JWT token
+        const privateKey = process.env.PRIVATE_KEY || "";
+        console.log("private key : ", privateKey);
+        const payload = {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        };
+        const token = jsonwebtoken.sign(payload, privateKey, {
+          algorithm: "RS512",
+          expiresIn: "5h",
         });
+        return {
+          user: user,
+          token: token,
+        };
+      } catch (error) {
+        console.log("Error: ", error);
       }
-      // Creation of JWT token
-      const secretKey = fs.readFileSync("./src/keys/private.key", "utf8");
-      const payload = {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-      };
-      const token = jsonwebtoken.sign(payload, secretKey, {
-        algorithm: "RS512",
-        expiresIn: "5h",
-      });
-      return {
-        user: user,
-        token: token,
-      };
     }),
   getUser: authorizedProcedure.query(async (opts) => {
     const idPayload = opts.ctx.user?.id;

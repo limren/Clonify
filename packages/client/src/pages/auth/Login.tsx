@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { trpc } from "../../../utils/trpc";
 import { useNavigate } from "react-router-dom";
-
+import "../../styles/Auth/Login.css";
 const inputs = z.object({
   email: z
     .string()
@@ -39,16 +39,16 @@ export const Login = () => {
     console.log("token : ", token);
   };
   return (
-    <section>
+    <section className="login">
       <main>
         <form onSubmit={handleSubmit(onSubmit)}>
           <section>
-            <label htmlFor="email">Entrez votre e-mail</label>
+            <label htmlFor="email">E-mail</label>
             <input id="email" type="text" required {...register("email")} />
             {errors.email && <p>{errors.email.message}</p>}
           </section>
           <section>
-            <label htmlFor="password">Entrez votre mot de passe</label>
+            <label htmlFor="password">Mot de passe</label>
             <input
               id="password"
               type="password"

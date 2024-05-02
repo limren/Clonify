@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { trpc } from "../../../utils/trpc";
-
+import "../../styles/Auth/Register.css";
 const inputs = z
   .object({
     username: z
@@ -51,11 +51,11 @@ export const Register = () => {
     console.log("response : ", response);
   };
   return (
-    <section>
+    <section className="register">
       <main>
         <form onSubmit={handleSubmit(onSubmit)}>
           <section>
-            <label htmlFor="username">Entrez votre nom d'utilisateur</label>
+            <label htmlFor="username">Nom d'utilisateur</label>
             <input
               id="username"
               type="text"
@@ -70,7 +70,7 @@ export const Register = () => {
             {errors.email && <p>{errors.email.message}</p>}
           </section>
           <section>
-            <label htmlFor="password">Entrez votre mot de passe</label>
+            <label htmlFor="password">Mot de passe</label>
             <input
               id="password"
               type="password"
@@ -80,7 +80,7 @@ export const Register = () => {
             {errors.password && <p>{errors.password.message}</p>}
           </section>
           <section>
-            <label htmlFor="confirmPassword">Entrez votre mot de passe</label>
+            <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
             <input
               id="confirmPassword"
               type="password"
@@ -90,12 +90,13 @@ export const Register = () => {
             {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
           </section>
           <section>
-            <select {...register("role")}>
+            <label htmlFor="selectRole">Rôle</label>
+            <select {...register("role")} id="selectRole">
               <option value="USER">Utilisateur</option>
               <option value="ARTIST">Artiste</option>
             </select>
           </section>
-          <button type="submit">Connexion</button>
+          <button type="submit">Inscription</button>
         </form>
       </main>
     </section>

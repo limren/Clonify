@@ -3,18 +3,19 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./styles/main.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Album } from "./pages/Album.tsx";
 import { Login } from "./pages/auth/Login.tsx";
 import { Register } from "./pages/auth/Register.tsx";
 import { CreateTrack } from "./pages/artist/create/CreateTrack.tsx";
 import { Feed } from "./pages/Feed.tsx";
 import { Playlists } from "./components/Feed/Nav/Playlists.tsx";
 import { SearchQuery } from "./pages/SearchQuery.tsx";
+import { CreateAlbum } from "./pages/artist/create/CreateAlbum.tsx";
+import { Playlist } from "./components/Playlist.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App children={<Album />} />,
+    element: <App children={<Feed />} />,
   },
   {
     path: "/login",
@@ -28,10 +29,10 @@ const router = createBrowserRouter([
     path: "/artist/createTrack",
     element: <App children={<CreateTrack />} />,
   },
-  // {
-  //   path: "/artist/createAlbum",
-  //   element: <App children={<CreateAlbum />} />,
-  // },
+  {
+    path: "/artist/createAlbum",
+    element: <App children={<CreateAlbum />} />,
+  },
   {
     path: "/feed",
     element: <App children={<Feed />} />,
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
   {
     path: "/feed/searchQuery",
     element: <App children={<SearchQuery />} />,
+  },
+  {
+    path: "/playlist/:id",
+    element: <App children={<Playlist />} />,
   },
 ]);
 

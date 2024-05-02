@@ -26,18 +26,43 @@ export const artistRouter = router({
           message: "You must be logged in to like an artist.",
         });
       }
-      await prisma.user.update({
+      const hasLikedArtist = await prisma.user.findFirst({
         where: {
-          id: user.id,
-        },
-        data: {
           likedArtists: {
-            connect: {
+            some: {
               id: artistId,
             },
           },
         },
       });
+      if (!hasLikedArtist) {
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            likedArtists: {
+              connect: {
+                id: artistId,
+              },
+            },
+          },
+        });
+      } else {
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            likedArtists: {
+              disconnect: {
+                id: artistId,
+              },
+            },
+          },
+        });
+      }
+      return true;
     }),
   getArtists: authorizedProcedure.query(async (opts) => {
     const { user } = opts.ctx;
@@ -75,7 +100,7 @@ export const artistRouter = router({
       },
     });
     const myArtistsIds = [...myArtists].map((artist) => artist.id);
-    artists.reduce((acc: Artist[], artist) => {
+    artists.reduce((acc: Artist[], artist: Artist) => {
       if (myArtistsIds.includes(artist.id)) {
         acc.push({ ...artist });
       }

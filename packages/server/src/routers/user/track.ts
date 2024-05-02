@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { authorizedProcedure, router } from "../../trpc";
 import { prisma } from "../../app";
+import { z } from "zod";
 
 export const trackRouter = router({
   getNewReleases: authorizedProcedure.query(async (opts) => {
@@ -39,4 +40,38 @@ export const trackRouter = router({
     });
     return newReleases;
   }),
+  likeTrack: authorizedProcedure
+    .input(
+      z.object({
+        trackId: z.number(),
+      })
+    )
+    .mutation(async (opts) => {
+      try {
+        const { user } = opts.ctx;
+        const { trackId } = opts.input;
+        if (!user) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "You must be logged in to like a track.",
+          });
+        }
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            likedTracks: {
+              connect: {
+                id: trackId,
+              },
+            },
+          },
+        });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    }),
 });
