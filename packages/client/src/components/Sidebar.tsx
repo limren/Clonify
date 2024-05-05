@@ -78,7 +78,7 @@ export const Sidebar = ({
               onClick={() => setPopUpOpen(true)}
             >
               <button>Create new playlist</button>
-              <img src="./AddIcon.svg" />
+              <img src="/AddIcon.svg" />
             </section>
           </section>
           {userData?.role === "ARTIST" && (

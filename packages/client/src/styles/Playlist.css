@@ -1,0 +1,46 @@
+.playlist {
+    margin: 10px;
+    background-color: #1E1E1E;
+    padding: 20px;
+    border-radius: 10px;
+
+    &>header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 28px;
+
+        & img {
+            width: 300px;
+            max-height: 230px;
+            object-fit: cover;
+        }
+
+        & section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            color: white;
+        }
+    }
+
+    &>main {
+        &>div {
+            margin-top: 30px;
+            width: 100%;
+            height: 0.5px;
+            background-color: #6d6d6d;
+        }
+
+        &>header {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+            margin: 13px 0;
+
+            & img {
+                width: 22px;
+            }
+        }
+    }
+}

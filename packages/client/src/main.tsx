@@ -58,7 +58,7 @@ const router = createBrowserRouter([
     element: <App children={<SearchQuery />} />,
   },
   {
-    path: "/playlist/:id",
+    path: "/playlist/:playlistId",
     element: <App children={<Playlist />} />,
   },
 ]);

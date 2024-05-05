@@ -38,8 +38,9 @@ app.use(
 
 app.listen(8000);
 
-// Handling image uploads
+app.use("/uploads", express.static("uploads"));
 
+// Handling image uploads
 const prisma = new PrismaClient();
 
 app.post(

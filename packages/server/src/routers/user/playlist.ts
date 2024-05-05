@@ -25,6 +25,8 @@ export const playlistRouter = router({
         select: {
           id: true,
           title: true,
+          thumbnailPath: true,
+          description: true,
           Track: {
             select: {
               id: true,
