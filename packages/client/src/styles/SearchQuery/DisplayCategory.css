@@ -1,6 +1,6 @@
 .displayCategories {
     color: white;
-    margin: 0 10px;
+    margin: 15px 10px;
 
     &>header {
         display: flex;
@@ -8,14 +8,30 @@
     }
 
     &>main {
-        &>a {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        &>section {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        &>section:hover {
+            background-color: #272727;
+        }
+
+        & a {
             cursor: pointer;
             padding: 10px 30px;
             border-radius: 10px;
-            margin: 20px 40px;
+            width: 600px;
             display: flex;
             flex-direction: row;
-            justify-content: space-around;
+            justify-content: space-between;
             color: white;
             text-decoration: none;
 
@@ -29,10 +45,21 @@
                     height: 30px;
                 }
             }
+
+
         }
 
-        &>a:hover {
-            background-color: #141414;
+        & footer {
+            display: flex;
+            gap: 10px;
+
+            & img {
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+            }
+
         }
+
     }
 }

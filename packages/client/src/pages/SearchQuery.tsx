@@ -11,19 +11,24 @@ export const SearchQuery = () => {
   });
   const categories = [
     {
+      title: "Tracks",
+      array: searchByMutation.data?.songs,
+      type: "track",
+    },
+    {
       title: "Playlists",
       array: searchByMutation.data?.playlists,
-      type: "Playlist",
+      type: "playlist",
     },
     {
       title: "Artists",
       array: searchByMutation.data?.artists,
-      type: "Artist",
+      type: "artist",
     },
     {
       title: "Albums",
       array: searchByMutation.data?.albums,
-      type: "Album",
+      type: "album",
     },
   ];
 

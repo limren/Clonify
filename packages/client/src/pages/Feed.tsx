@@ -1,7 +1,7 @@
 import { FeedNav } from "../components/Feed/FeedNav";
 import { NewReleases } from "../components/Feed/NewReleases";
 import { PlaylistOfTheDay } from "../components/Feed/PlaylistOfTheDay";
-import { Playlists } from "../components/Feed/Nav/Playlists";
+import { PlaylistsFeedNav } from "../components/Feed/Nav/PlaylistsFeedNav";
 import "../styles/Feed/Feed.css";
 
 export const Feed = ({ children }: { children?: React.ReactNode }) => {
@@ -13,7 +13,7 @@ export const Feed = ({ children }: { children?: React.ReactNode }) => {
         </header>
         <main>
           <FeedNav />
-          {children ? children : <Playlists />}
+          {children ? children : <PlaylistsFeedNav />}
         </main>
       </main>
       <section>

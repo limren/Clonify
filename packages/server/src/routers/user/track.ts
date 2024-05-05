@@ -74,4 +74,55 @@ export const trackRouter = router({
         return false;
       }
     }),
+  addTrackToPlaylist: authorizedProcedure
+    .input(
+      z.object({
+        trackId: z.number(),
+        playlistId: z.number(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { user } = opts.ctx;
+      const { trackId, playlistId } = opts.input;
+
+      const updatedData = await prisma.playlist.update({
+        where: {
+          id: playlistId,
+          userId: user?.id,
+        },
+        data: {
+          Track: {
+            connect: {
+              id: trackId,
+            },
+          },
+        },
+      });
+      return updatedData;
+    }),
+  removeTrackPlaylist: authorizedProcedure
+    .input(
+      z.object({
+        trackId: z.number(),
+        playlistId: z.number(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { user } = opts.ctx;
+      const { trackId, playlistId } = opts.input;
+      const updatedData = await prisma.playlist.update({
+        where: {
+          id: playlistId,
+          userId: user?.id,
+        },
+        data: {
+          Track: {
+            disconnect: {
+              id: trackId,
+            },
+          },
+        },
+      });
+      return updatedData;
+    }),
 });

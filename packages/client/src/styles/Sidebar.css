@@ -69,7 +69,7 @@
         }
     }
 
-    & .playlists {
+    & .playlistsNav {
         max-height: 200px;
         overflow-y: scroll;
         scrollbar-width: thin;

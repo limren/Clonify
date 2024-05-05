@@ -4,7 +4,7 @@ import "../styles/Sidebar.css";
 // import { LoggedOut } from "./Sidebar/LoggedOut";
 import { Link } from "react-router-dom";
 import { trpc } from "../../utils/trpc";
-import { Playlists } from "./Sidebar/Playlists";
+import { PlaylistsNav } from "./Sidebar/PlaylistsNav";
 export const Sidebar = ({
   setPopUpOpen,
 }: {
@@ -30,7 +30,7 @@ export const Sidebar = ({
               <li>
                 <div>
                   <img></img>
-                  <Link to="/">Playlists</Link>
+                  <Link to="/playlists">Playlists</Link>
                 </div>
               </li>
               <li>
@@ -72,7 +72,7 @@ export const Sidebar = ({
           </section>
           <section>
             <h3>YOUR PLAYLISTS</h3>
-            <Playlists />
+            <PlaylistsNav />
             <section
               className="create-popup"
               onClick={() => setPopUpOpen(true)}

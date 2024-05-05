@@ -10,6 +10,13 @@ export const searchRouter = router({
       })
     )
     .query(async (opts) => {
+      const songs = await prisma.track.findMany({
+        where: {
+          title: {
+            contains: opts.input.query,
+          },
+        },
+      });
       const playlists = await prisma.playlist.findMany({
         where: {
           title: {
@@ -33,6 +40,7 @@ export const searchRouter = router({
         },
       });
       return {
+        songs: songs,
         playlists: playlists,
         albums: albums,
         artists: artists,

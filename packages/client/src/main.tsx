@@ -7,10 +7,11 @@ import { Login } from "./pages/auth/Login.tsx";
 import { Register } from "./pages/auth/Register.tsx";
 import { CreateTrack } from "./pages/artist/create/CreateTrack.tsx";
 import { Feed } from "./pages/Feed.tsx";
-import { Playlists } from "./components/Feed/Nav/Playlists.tsx";
+import { PlaylistsFeedNav } from "./components/Feed/Nav/PlaylistsFeedNav.tsx";
 import { SearchQuery } from "./pages/SearchQuery.tsx";
 import { CreateAlbum } from "./pages/artist/create/CreateAlbum.tsx";
 import { Playlist } from "./components/Playlist.tsx";
+import { Playlists } from "./pages/Playlists.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/feed/playlists",
-    element: <App children={<Feed children={<Playlists />} />} />,
+    element: <App children={<Feed children={<PlaylistsFeedNav />} />} />,
   },
   {
     path: "/feed/albums",
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
   {
     path: "/feed/searchQuery",
     element: <App children={<SearchQuery />} />,
+  },
+  {
+    path: "/playlists",
+    element: <App children={<Playlists />} />,
   },
   {
     path: "/playlist/:playlistId",

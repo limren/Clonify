@@ -1,7 +1,7 @@
 import { trpc } from "../../../../utils/trpc";
 import "../../../styles/Feed/Playlists.css";
 
-export const Playlists = () => {
+export const PlaylistsFeedNav = () => {
   const playlistsFetch = trpc.user.getPlaylists.useQuery();
   const playlists =
     playlistsFetch.data && playlistsFetch.data.length > 5

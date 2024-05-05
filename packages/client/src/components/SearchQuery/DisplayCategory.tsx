@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "../../styles/SearchQuery/DisplayCategory.css";
+import { trpc } from "../../../utils/trpc";
 
 export const DisplayCategory = ({
   category,
@@ -12,6 +13,7 @@ export const DisplayCategory = ({
   };
   query: string;
 }) => {
+  const addPlaylistMutate = trpc.user.addTrackPlaylist.useMutation();
   console.log("array : ", category.title, category.array, category.type);
   return (
     <section className="displayCategories">
@@ -22,17 +24,33 @@ export const DisplayCategory = ({
       <main>
         {category.array && category.array.length > 0 ? (
           category.array.map((item: any) => (
-            <Link key={item.id} to="#">
-              <header>
-                <img src="../Thumbnail.png" />
-                {item.title && <p>{item.title}</p>}
-                {item.username && <p>{item.username}</p>}
-              </header>
+            <section>
+              {" "}
+              <Link key={item.id} to={`/${category.type}/${item.id}`}>
+                <header>
+                  <img
+                    src={
+                      item.thumbnailPath
+                        ? `http://localhost:8000/uploads/${category.type}/${item.thumbnailPath}`
+                        : "/public/Thumbnail.png"
+                    }
+                  />
+                  {item.title && <p>{item.title}</p>}
+                  {item.username && <p>{item.username}</p>}
+                </header>
+              </Link>
               <footer>
-                <img src="../HeartFull.svg"></img>
-                <img src="../HeartEmpty.svg"></img>
+                {/* #TODO - Change color of SVG */}
+                <img src="/public/HeartFull.svg" />
+                <img src="/public/HeartEmpty.svg" />
+                <img
+                  src="/public/AddPlaylist.svg"
+                  onClick={() => {
+                    console.log("zaeaze");
+                  }}
+                />
               </footer>
-            </Link>
+            </section>
           ))
         ) : (
           <p>No result found</p>
