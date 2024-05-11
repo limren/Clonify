@@ -12,6 +12,8 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 13px;
+        padding-top: 30px;
 
         &>section {
             display: flex;
@@ -52,6 +54,7 @@
         & footer {
             display: flex;
             gap: 10px;
+            position: relative;
 
             & img {
                 width: 30px;

@@ -16,6 +16,7 @@
     "@trpc/next": "^11.0.0-next-beta.294",
     "@trpc/react-query": "^11.0.0-next-beta.294",
     "axios": "^1.6.8",
+    "client": "file:",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.50.1",

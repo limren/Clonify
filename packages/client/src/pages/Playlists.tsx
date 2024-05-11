@@ -1,4 +1,3 @@
-import React from "react";
 import { trpc } from "../../utils/trpc";
 import "../styles/Playlists.css";
 import { Link } from "react-router-dom";

@@ -1,0 +1,60 @@
+.playlistItem {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 10px;
+    padding: 8px 16px;
+
+    &>section {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+
+        & header {
+            & img {
+                width: 28px;
+            }
+        }
+
+        & p {
+            font-size: 18px;
+        }
+
+        & h3 {
+            font-size: 16px;
+        }
+
+        &>main {
+
+
+            &>h4 {
+                font-weight: 200;
+                color: #FFFFFF99;
+                font-size: 14px;
+            }
+        }
+
+    }
+
+    & .hide {
+        display: none;
+    }
+
+    & .show {
+        display: block;
+    }
+}
+
+.playlistItem:hover {
+    background-color: #3B3B3B;
+
+    & .hide {
+        display: block;
+    }
+
+    & .show {
+        display: none;
+    }
+}

@@ -25,6 +25,7 @@
     }
 
     &>main {
+
         &>div {
             margin-top: 30px;
             width: 100%;
@@ -40,6 +41,29 @@
 
             & img {
                 width: 22px;
+            }
+        }
+
+        &>main {
+            padding-top: 40px;
+
+            &>header {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                color: #FFFFFF99;
+                font-size: 14px;
+                padding: 0 8px;
+
+                & img {
+                    width: 25px;
+                }
+            }
+
+            &>ul {
+                list-style: none;
+                color: white;
+                margin-top: 24px;
             }
         }
     }

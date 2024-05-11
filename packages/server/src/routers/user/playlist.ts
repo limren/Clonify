@@ -37,6 +37,13 @@ export const playlistRouter = router({
                   username: true,
                 },
               },
+              minutes: true,
+              seconds: true,
+              Album: {
+                select: {
+                  title: true,
+                },
+              },
               thumbnailPath: true,
             },
           },
@@ -68,6 +75,11 @@ export const playlistRouter = router({
               select: {
                 id: true,
                 username: true,
+              },
+            },
+            Album: {
+              select: {
+                title: true,
               },
             },
             thumbnailPath: true,

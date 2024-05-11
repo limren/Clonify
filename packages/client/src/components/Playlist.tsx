@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { trpc } from "../../utils/trpc";
 import "../styles/Playlist.css";
+import { PlaylistItem } from "./Playlist/PlaylistItem";
 export const Playlist = () => {
   const { playlistId } = useParams();
   if (!playlistId) {
@@ -27,15 +28,24 @@ export const Playlist = () => {
         </section>
       </header>
       <main>
-        <div></div>
         <header>
           {/* #TODO - Change color of SVG */}
           <img src="/DownloadPlaylist.svg" alt="Download playlist" />
           <img src="/Dots.svg" alt="Playlist's parameters" />
         </header>
-        {playlistData?.Track.map((track) => {
-          return <>{track.title}</>;
-        })}
+        <main>
+          <header>
+            <h3>Titre</h3>
+            <h3>Album</h3>
+            <h3>Lectures</h3>
+            <img src="/public/Clock.svg" />
+          </header>
+          <ul>
+            {playlistData?.Track.map((track, index) => (
+              <PlaylistItem track={track} index={index} key={track.id} />
+            ))}
+          </ul>
+        </main>
       </main>
     </section>
   );
