@@ -38,12 +38,16 @@ export const Playlist = () => {
             <h3>Titre</h3>
             <h3>Album</h3>
             <h3>Lectures</h3>
-            <img src="/public/Clock.svg" />
+            <section>
+              <img src="/public/Clock.svg" />
+            </section>
           </header>
           <ul>
             {playlistData?.Track.map((track, index) => (
               <PlaylistItem track={track} index={index} key={track.id} />
             ))}
+            {!playlistData ||
+              (playlistData?.Track.length == 0 && <>No track found</>)}
           </ul>
         </main>
       </main>

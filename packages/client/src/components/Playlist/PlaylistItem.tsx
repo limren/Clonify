@@ -1,8 +1,11 @@
+import { trpc } from "../../../utils/trpc";
 import "../../styles/Playlist/PlaylistItem.css";
+import { useTrackStore } from "../../../utils/trackStore";
 type PlaylistItemProps = {
   track: {
     id: number;
     title: string;
+    timesListened: number;
     thumbnailPath: string | null;
     Album: {
       title: string;
@@ -17,10 +20,26 @@ type PlaylistItemProps = {
 
   index: number;
 };
-// TODO: FIX THE DISPLAY BETWEEN ITEMS & HEADER
 export const PlaylistItem = ({ track, index }: PlaylistItemProps) => {
+  const utils = trpc.useUtils();
+  const addTrackListenerMutate = trpc.user.addTrackListener.useMutation({
+    onSuccess: () => {
+      utils.user.getPlaylist.invalidate();
+    },
+  });
+  const trackQueuedId = useTrackStore((state) => state.trackId);
+  const changeTrack = useTrackStore((state) => state.changeTrack);
+  const handleChangeMusic = async (newTrackId: number) => {
+    if (newTrackId != trackQueuedId) {
+      changeTrack(newTrackId);
+      const res = await addTrackListenerMutate.mutateAsync({
+        trackId: newTrackId,
+      });
+      console.log("res : ", res);
+    }
+  };
   return (
-    <li className="playlistItem">
+    <li className="playlistItem" onClick={() => handleChangeMusic(track.id)}>
       <section>
         <header>
           <img src="/public/PlayButton.svg" className="hide" />
@@ -34,7 +53,7 @@ export const PlaylistItem = ({ track, index }: PlaylistItemProps) => {
       <section>
         <h3>{track.Album?.title ? track.Album.title : "Aucun"}</h3>
       </section>
-      <section>0</section>
+      <section>{track.timesListened}</section>
       <section>
         <h3>
           {track.minutes}:{track.seconds.toString().substring(0, 2)}

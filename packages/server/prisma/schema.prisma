@@ -54,6 +54,7 @@ model Track {
   Album         Album?     @relation(fields: [albumId], references: [id])
   minutes       Int
   seconds       Int
+  timesListened Int        @default(0)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   User          User?      @relation(fields: [artistId], references: [id])

@@ -125,4 +125,36 @@ export const trackRouter = router({
       });
       return updatedData;
     }),
+  addTrackListener: authorizedProcedure
+    .input(
+      z.object({
+        trackId: z.number(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { trackId } = opts.input;
+      const currentTrack = await prisma.track.findUnique({
+        where: {
+          id: trackId,
+        },
+        select: {
+          timesListened: true,
+        },
+      });
+      if (!currentTrack) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "The ID doesn't match any track.",
+        });
+      }
+      const changedTrack = await prisma.track.update({
+        where: {
+          id: trackId,
+        },
+        data: {
+          timesListened: currentTrack.timesListened + 1,
+        },
+      });
+      return changedTrack;
+    }),
 });

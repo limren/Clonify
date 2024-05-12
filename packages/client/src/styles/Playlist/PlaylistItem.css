@@ -11,6 +11,7 @@
         flex-direction: row;
         gap: 1rem;
         align-items: center;
+        width: 110px;
 
         & header {
             & img {

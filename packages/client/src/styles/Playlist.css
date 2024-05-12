@@ -53,11 +53,19 @@
                 justify-content: space-between;
                 color: #FFFFFF99;
                 font-size: 14px;
-                padding: 0 8px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #FFFFFF99;
+
+                /* Make the header and playlist items aligned */
+                & h3,
+                & section {
+                    width: 110px
+                }
 
                 & img {
                     width: 25px;
                 }
+
             }
 
             &>ul {

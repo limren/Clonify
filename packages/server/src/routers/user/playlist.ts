@@ -31,6 +31,7 @@ export const playlistRouter = router({
             select: {
               id: true,
               title: true,
+              timesListened: true,
               User: {
                 select: {
                   id: true,
