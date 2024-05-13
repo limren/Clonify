@@ -4,6 +4,50 @@ import { prisma } from "../../app";
 import { z } from "zod";
 
 export const trackRouter = router({
+  getTrack: authorizedProcedure
+    .input(
+      z.object({
+        trackId: z.number().nullable(),
+      })
+    )
+    .query(async (opts) => {
+      const { user } = opts.ctx;
+      const { trackId } = opts.input;
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You must be logged in to view new releases.",
+        });
+      }
+      if (!trackId) {
+        return null;
+      }
+      const track = await prisma.track.findUnique({
+        where: {
+          id: trackId,
+        },
+        select: {
+          id: true,
+          thumbnailPath: true,
+          title: true,
+          minutes: true,
+          seconds: true,
+          User: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      });
+      if (!track) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The requested song doesn't exist in the database.",
+        });
+      }
+
+      return track;
+    }),
   getNewReleases: authorizedProcedure.query(async (opts) => {
     const { user } = opts.ctx;
     if (!user) {

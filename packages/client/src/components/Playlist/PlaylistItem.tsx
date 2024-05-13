@@ -27,22 +27,32 @@ export const PlaylistItem = ({ track, index }: PlaylistItemProps) => {
       utils.user.getPlaylist.invalidate();
     },
   });
+  const isPlaying = useTrackStore((state) => state.beingPlayed);
   const trackQueuedId = useTrackStore((state) => state.trackId);
+  const changePlayMode = useTrackStore((state) => state.changePlay);
   const changeTrack = useTrackStore((state) => state.changeTrack);
   const handleChangeMusic = async (newTrackId: number) => {
     if (newTrackId != trackQueuedId) {
       changeTrack(newTrackId);
-      const res = await addTrackListenerMutate.mutateAsync({
+      changePlayMode(true);
+      await addTrackListenerMutate.mutateAsync({
         trackId: newTrackId,
       });
-      console.log("res : ", res);
+    } else {
+      changePlayMode(!isPlaying);
     }
   };
   return (
     <li className="playlistItem" onClick={() => handleChangeMusic(track.id)}>
       <section>
         <header>
-          <img src="/public/PlayButton.svg" className="hide" />
+          {/* TODO: Create a component */}
+          {isPlaying && trackQueuedId == track.id ? (
+            <img src="/public/PauseButton.svg" className="hide" />
+          ) : (
+            <img src="/public/PlayButton.svg" className="hide" />
+          )}
+
           <p className="show">{index + 1}</p>
         </header>
         <main>
