@@ -3,6 +3,25 @@ import { authorizedProcedure, router } from "../../trpc";
 import { prisma } from "../../app";
 import { z } from "zod";
 
+async function checkIfUserLikedTrack(
+  userId: number,
+  trackId: number
+): Promise<boolean> {
+  try {
+    // Retrieve the user with their liked tracks
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { likedTracks: { where: { id: trackId } } },
+    });
+
+    return (
+      !!user && user.likedTracks.some((likedTrack) => likedTrack.id === trackId)
+    );
+  } catch (error) {
+    return false;
+  }
+}
+
 export const trackRouter = router({
   getTrack: authorizedProcedure
     .input(
@@ -39,6 +58,7 @@ export const trackRouter = router({
           },
         },
       });
+      const isLiked = await checkIfUserLikedTrack(user.id, trackId);
       if (!track) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -46,7 +66,7 @@ export const trackRouter = router({
         });
       }
 
-      return track;
+      return { ...track, isLiked: isLiked };
     }),
   getNewReleases: authorizedProcedure.query(async (opts) => {
     const { user } = opts.ctx;
@@ -84,40 +104,80 @@ export const trackRouter = router({
     });
     return newReleases;
   }),
-  likeTrack: authorizedProcedure
+  toggleLikeTrack: authorizedProcedure
     .input(
       z.object({
         trackId: z.number(),
       })
     )
     .mutation(async (opts) => {
-      try {
-        const { user } = opts.ctx;
-        const { trackId } = opts.input;
-        if (!user) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "You must be logged in to like a track.",
-          });
-        }
+      const { user } = opts.ctx;
+      const { trackId } = opts.input;
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You must be logged in to like a track.",
+        });
+      }
+      const userLikedTrack = await prisma.user.findUnique({
+        where: { id: user.id },
+        include: { likedTracks: { where: { id: trackId } } },
+      });
+      if (userLikedTrack && userLikedTrack.likedTracks.length > 0) {
         await prisma.user.update({
-          where: {
-            id: user.id,
-          },
+          where: { id: user.id },
           data: {
             likedTracks: {
-              connect: {
-                id: trackId,
-              },
+              disconnect: { id: trackId },
+            },
+          },
+        });
+        return false;
+      } else {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            likedTracks: {
+              connect: { id: trackId },
             },
           },
         });
         return true;
-      } catch (err) {
-        console.log(err);
-        return false;
       }
     }),
+  getLikedTracks: authorizedProcedure.query(async (opts) => {
+    const { user } = opts.ctx;
+
+    const likedTracks = await prisma.user.findUnique({
+      where: {
+        id: user?.id,
+      },
+      select: {
+        likedTracks: {
+          select: {
+            title: true,
+            minutes: true,
+            seconds: true,
+            timesListened: true,
+            year: true,
+            thumbnailPath: true,
+            trackPath: true,
+            User: {
+              select: {
+                username: true,
+              },
+            },
+            Album: {
+              select: {
+                title: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return likedTracks;
+  }),
   addTrackToPlaylist: authorizedProcedure
     .input(
       z.object({

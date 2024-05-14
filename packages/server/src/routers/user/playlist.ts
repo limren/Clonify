@@ -227,58 +227,6 @@ export const playlistRouter = router({
       });
       return playlist;
     }),
-  // updatePlaylist: authorizedProcedure
-  //   .input(
-  //     z.object({
-  //       playlistId: z.number(),
-  //       newTitle: z.string().optional(),
-  //       newDescription: z.string().optional(),
-  //     })
-  //   )
-  //   .mutation(async (opts) => {
-  //     const { user } = opts.ctx;
-  //     if (!user) {
-  //       throw new TRPCError({
-  //         code: "UNAUTHORIZED",
-  //         message: "You must be logged in to update a playlist.",
-  //       });
-  //     }
-  //     const { newTitle, newDescription } = opts.input;
-
-  //     const objInputs = {};
-  //     if (newTitle) {
-  //       objInputs["title"] = newTitle;
-  //     }
-  //     if (newDescription) {
-  //       objInputs["description"] = newDescription;
-  //     }
-
-  //     const playlist = await prisma.playlist.update({
-  //       where: {
-  //         id: opts.input.playlistId,
-  //         userId: user.id,
-  //       },
-  //       data: objInputs,
-  //       select: {
-  //         id: true,
-  //         title: true,
-  //         Track: {
-  //           select: {
-  //             id: true,
-  //             title: true,
-  //             User: {
-  //               select: {
-  //                 id: true,
-  //                 username: true,
-  //               },
-  //             },
-  //             thumbnailPath: true,
-  //           },
-  //         },
-  //       },
-  //     });
-  //     return playlist;
-  //   }),
   getRandomPlaylist: authorizedProcedure.query(async (opts) => {
     const { user } = opts.ctx;
     if (!user) {
@@ -293,7 +241,7 @@ export const playlistRouter = router({
       },
     });
     if (playlists.length === 0) {
-      return {};
+      return null;
     }
     // Getting a random playlist from the user's playlists
     const randomNb = Math.floor(Math.random() * playlists.length);

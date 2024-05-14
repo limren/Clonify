@@ -3,15 +3,17 @@ import { useTrackStore } from "../../utils/trackStore";
 import { trpc } from "../../utils/trpc";
 import "../styles/MusicPlayer.css";
 
+// TODO: Make this component simplier
+
 export const MusicPlayer = () => {
   const [seconds, setSeconds] = useState(0);
   const trackId = useTrackStore((store) => store.trackId);
-  console.log("trackid : ", trackId);
   const isPlaying = useTrackStore((store) => store.beingPlayed);
   const changePlayMode = useTrackStore((store) => store.changePlay);
   const getTrackFetch = trpc.user.getTrack.useQuery({
     trackId: trackId,
   });
+  const toggleLikedTrackMutation = trpc.user.toggleLikeTrack.useMutation();
   const trackData = getTrackFetch.data;
   const minutesTrack = trackData?.minutes ? trackData?.minutes : 0;
   const secondsTrack = trackData?.seconds ? trackData?.seconds : 0;
@@ -29,6 +31,13 @@ export const MusicPlayer = () => {
   if (!trackData) {
     return <section className="MusicPlayer"></section>;
   }
+
+  const handleLike = async () => {
+    const res = await toggleLikedTrackMutation.mutateAsync({
+      trackId: trackData.id,
+    });
+    console.log("res : ", res);
+  };
 
   return (
     <section className="MusicPlayer">
@@ -48,6 +57,11 @@ export const MusicPlayer = () => {
               ? trackData.User.username
               : "Unknown artist"}
           </h3>
+          {trackData.isLiked ? (
+            <img src="/HeartFull.svg" alt="Liked track" onClick={handleLike} />
+          ) : (
+            <img src="/HeartEmpty.svg" alt="Like track" onClick={handleLike} />
+          )}
         </section>
       </header>
       <main>
