@@ -52,7 +52,6 @@ export const PopUpPlaylist = ({
         "Content-Type": "multipart/form-data",
       },
     };
-    console.log("sending");
     const res = await axios.post(
       "http://localhost:8000/api/playlist",
       formData,

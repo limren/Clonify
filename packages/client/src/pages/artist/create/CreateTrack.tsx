@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { trpc } from "../../../../utils/trpc";
 import "../../../styles/Artist/Create/CreateTrack.css";
+import axios from "axios";
+import { getAuthToken } from "../../../../utils/token";
 const inputs = z.object({
   title: z
     .string()
@@ -21,6 +23,7 @@ const inputs = z.object({
 });
 type Inputs = z.infer<typeof inputs>;
 export const CreateTrack = () => {
+  const [file, setFile] = useState<File | null>(null);
   const {
     register,
     handleSubmit,
@@ -31,14 +34,36 @@ export const CreateTrack = () => {
   const getAlbums = trpc.artist.getMyAlbums.useQuery();
   const albums = getAlbums.data;
   console.log("albums : ", albums);
-  const mutateData = trpc.artist.createTrack.useMutation();
   const onSubmit = async (data: Inputs) => {
+    const formData = new FormData();
     if (data.albumId === 0) {
       data.albumId = null;
+    } else if (data.albumId != null) {
+      formData.append("albumId", data.albumId.toString());
     }
-    console.log("data : ", data);
-    const response = await mutateData.mutateAsync(data);
-    console.log("response : ", response);
+    if (file) {
+      formData.append("trackImg", file);
+    }
+    formData.append("title", data.title);
+    formData.append("year", data.year.toString());
+    formData.append("minutes", data.minutes.toString());
+    formData.append("seconds", data.seconds.toString());
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    const res = await axios.post(
+      "http://localhost:8000/api/track",
+      formData,
+      config
+    );
+    console.log("res : ", res);
+  };
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFile(e.target?.files ? e.target.files[0] : null);
   };
 
   return (
@@ -98,6 +123,15 @@ export const CreateTrack = () => {
             </select>
           )}
           {errors.albumId && <p>{errors.albumId.message}</p>}
+        </section>
+        <section>
+          <label htmlFor="trackImg"></label>
+          <input
+            type="file"
+            name="trackImg"
+            id="trackImg"
+            onChange={handleFile}
+          />
         </section>
         <button type="submit">Create</button>
       </form>

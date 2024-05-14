@@ -7,20 +7,15 @@ import { createContext, getUserFromHeader } from "./src/context";
 import multer from "multer";
 import { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import {
+  storagePlaylist,
+  storageTrack,
+  storageAlbum,
+} from "./src/utils/storage";
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/playlist");
-  },
-  filename: function (req, file, cb) {
-    const splitArray = file.originalname.split(".");
-    const fileExt =
-      splitArray.length > 0 ? splitArray[splitArray.length - 1] : "png";
-    cb(null, file.fieldname + "-" + Date.now() + "." + fileExt);
-  },
-});
-
-const playlistUpload = multer({ storage });
+const playlistUpload = multer({ storage: storagePlaylist });
+const trackUpload = multer({ storage: storageTrack });
+const albumUpload = multer({ storage: storageAlbum });
 
 dotenv.config();
 
@@ -93,6 +88,78 @@ app.post(
         },
       });
       res.status(200).json(playlist);
+    } catch (err) {
+      console.log("error :", err);
+      res.status(401).json({ error: err });
+    }
+  }
+);
+app.post(
+  "/api/album",
+  albumUpload.single("albumImg"),
+  async (req, res, next) => {
+    try {
+      console.log("file : ", req.file);
+      const data = {
+        title: req.body.title,
+        year: parseInt(req.body?.year) || 0,
+        thumbnailPath: req.file?.filename || null,
+      };
+      const user = await getUserFromHeader(req, res);
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You need to be authenticated to perform this action.",
+        });
+      }
+      const album = await prisma.album.create({
+        data: {
+          ...data,
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      });
+      res.status(200).json(album);
+    } catch (err) {
+      console.log("error :", err);
+      res.status(401).json({ error: err });
+    }
+  }
+);
+app.post(
+  "/api/track",
+  trackUpload.single("trackImg"),
+  async (req, res, next) => {
+    try {
+      const data = {
+        title: req.body.title,
+        minutes: parseInt(req.body.minutes),
+        seconds: parseInt(req.body.seconds),
+        year: parseInt(req.body.year),
+        thumbnailPath: req.file?.filename || null,
+      };
+      const user = await getUserFromHeader(req, res);
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You need to be authenticated to perform this action.",
+        });
+      }
+      const track = await prisma.track.create({
+        data: {
+          ...data,
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      });
+
+      res.status(200).json(track);
     } catch (err) {
       console.log("error :", err);
       res.status(401).json({ error: err });

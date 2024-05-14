@@ -1,7 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { trpc } from "../../../../utils/trpc";
+import { useState } from "react";
+import axios from "axios";
+import { getAuthToken } from "../../../../utils/token";
 
 const inputs = z.object({
   title: z
@@ -13,6 +15,7 @@ const inputs = z.object({
 type Inputs = z.infer<typeof inputs>;
 
 export const CreateAlbum = () => {
+  const [file, setFile] = useState<File | null>(null);
   const {
     register,
     handleSubmit,
@@ -20,10 +23,29 @@ export const CreateAlbum = () => {
   } = useForm<Inputs>({
     resolver: zodResolver(inputs),
   });
-  const createAlbumMutate = trpc.artist.createAlbum.useMutation();
   const onSubmit = async (data: Inputs) => {
-    const res = await createAlbumMutate.mutateAsync(data);
+    const formData = new FormData();
+    if (file) {
+      formData.append("albumImg", file);
+    }
+    formData.append("title", data.title);
+    console.log("year : ", data.year);
+    formData.append("year", data.year.toString());
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    const res = await axios.post(
+      "http://localhost:8000/api/album",
+      formData,
+      config
+    );
     console.log("res : ", res);
+  };
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFile(e.target?.files ? e.target.files[0] : null);
   };
   return (
     <section>
@@ -43,6 +65,10 @@ export const CreateAlbum = () => {
             {...register("year", { valueAsNumber: true })}
           />
           {errors.year && <p>{errors.year.message}</p>}
+        </section>
+        <section>
+          <label htmlFor="img">Album's thumbnail</label>
+          <input type="file" onChange={handleFile} />
         </section>
         <button type="submit">Create</button>
       </form>

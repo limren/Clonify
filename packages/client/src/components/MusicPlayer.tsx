@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import { useTrackStore } from "../../utils/trackStore";
 import { trpc } from "../../utils/trpc";
 import "../styles/MusicPlayer.css";
 
 export const MusicPlayer = () => {
+  const [seconds, setSeconds] = useState(0);
   const trackId = useTrackStore((store) => store.trackId);
   console.log("trackid : ", trackId);
   const isPlaying = useTrackStore((store) => store.beingPlayed);
@@ -11,9 +13,23 @@ export const MusicPlayer = () => {
     trackId: trackId,
   });
   const trackData = getTrackFetch.data;
+  const minutesTrack = trackData?.minutes ? trackData?.minutes : 0;
+  const secondsTrack = trackData?.seconds ? trackData?.seconds : 0;
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (isPlaying && minutesTrack * 60 + secondsTrack == seconds) {
+        changePlayMode(false);
+      } else {
+        setSeconds((state) => state + 1);
+      }
+    }, 1000);
+    // When component unmount it clears the created interval when mounted
+    return () => clearInterval(intervalId);
+  }, []);
   if (!trackData) {
     return <section className="MusicPlayer"></section>;
   }
+
   return (
     <section className="MusicPlayer">
       <header>
@@ -53,14 +69,24 @@ export const MusicPlayer = () => {
           <img src="/public/NextButton.svg" alt="Next" />
         </section>
         <section>
+          <section>
+            <p>
+              {(seconds / 60).toString().substring(0, 1)}:
+              {seconds % 60 > 9 ? seconds % 60 : "0" + (seconds % 60)}
+            </p>
+          </section>
           <section></section>
           <section>
             <p>
-              {trackData.minutes}:{trackData.seconds.toString().substring(0, 2)}
+              {trackData.minutes}:
+              {trackData.seconds > 9
+                ? trackData.seconds.toString().substring(0, 2)
+                : "0" + trackData.seconds.toString().substring(0, 2)}
             </p>
           </section>
         </section>
       </main>
+      {/* TODO: fill it */}
       <footer></footer>
     </section>
   );
