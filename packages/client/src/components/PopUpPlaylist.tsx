@@ -3,7 +3,7 @@ import "../styles/PopUpPlaylist.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { trpc } from "../../utils/trpc";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 import { getAuthToken } from "../../utils/token";
 
@@ -19,8 +19,8 @@ export const PopUpPlaylist = ({
 }: {
   setPopUpOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  //
   const [file, setFile] = useState<File | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -29,13 +29,6 @@ export const PopUpPlaylist = ({
     resolver: zodResolver(input),
   });
   const utils = trpc.useUtils();
-  // const mutation = trpc.user.createPlaylist.useMutation({
-  //   onSuccess: (data) => {
-  //     console.log("data : ", data);
-  //     utils.user.getPlaylists.refetch();
-  //     setPopUpOpen(false);
-  //   },
-  // });
   const onSubmit = async (data: Input) => {
     const formData = new FormData();
     if (!file) {
@@ -64,6 +57,7 @@ export const PopUpPlaylist = ({
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFile(e.target?.files ? e.target.files[0] : null);
   };
+  console.log("reazeaze");
   return (
     <section className="popUpPlaylist">
       <main className="popUpPlaylistContent">

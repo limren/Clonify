@@ -36,7 +36,8 @@ export const MusicPlayer = () => {
     const res = await toggleLikedTrackMutation.mutateAsync({
       trackId: trackData.id,
     });
-    console.log("res : ", res);
+    // TODO: Handle state better
+    trackData.isLiked = res;
   };
 
   return (
@@ -57,11 +58,6 @@ export const MusicPlayer = () => {
               ? trackData.User.username
               : "Unknown artist"}
           </h3>
-          {trackData.isLiked ? (
-            <img src="/HeartFull.svg" alt="Liked track" onClick={handleLike} />
-          ) : (
-            <img src="/HeartEmpty.svg" alt="Like track" onClick={handleLike} />
-          )}
         </section>
       </header>
       <main>
@@ -100,8 +96,14 @@ export const MusicPlayer = () => {
           </section>
         </section>
       </main>
-      {/* TODO: fill it */}
-      <footer></footer>
+      {/* TODO: Add pop up playlist */}
+      <footer>
+        {trackData.isLiked ? (
+          <img src="/HeartFull.svg" alt="Liked track" onClick={handleLike} />
+        ) : (
+          <img src="/HeartEmpty.svg" alt="Like track" onClick={handleLike} />
+        )}
+      </footer>
     </section>
   );
 };
